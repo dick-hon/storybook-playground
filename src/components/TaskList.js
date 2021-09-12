@@ -3,12 +3,13 @@ import PropTypes from "prop-types";
 import Task from "./Task";
 
 import { connect } from "react-redux";
-import { archiveTask, pinTask } from "../lib/redux";
+import { archiveTask, pinTask, changeTaskTitle } from "../lib/redux";
 
-export const PureTaskList = ({ loading, tasks, onPinTask, onArchiveTask }) => {
+export const PureTaskList = ({ loading, tasks, onPinTask, onArchiveTask, onTitleChange }) => {
   const events = {
     onPinTask,
     onArchiveTask,
+    onTitleChange,
   };
 
   const LoadingRow = (
@@ -83,5 +84,6 @@ export default connect(
   (dispatch) => ({
     onArchiveTask: (id) => dispatch(archiveTask(id)),
     onPinTask: (id) => dispatch(pinTask(id)),
+    onTitleChange: (id, title) => dispatch(changeTaskTitle(id, title)),
   })
 )(PureTaskList);

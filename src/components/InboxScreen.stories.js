@@ -27,5 +27,5 @@ export const Default = Template.bind({});
 
 export const Error = Template.bind({});
 Error.args = {
-  error: "Something",
+  isWrongState: true,
 };

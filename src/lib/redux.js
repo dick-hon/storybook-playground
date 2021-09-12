@@ -4,11 +4,13 @@ export const actions = {
   ARCHIVE_TASK: "ARCHIVE_TASK",
   PIN_TASK: "PIN_TASK",
   SET_WRONG_STATE: "SET_WRONG_STATE",
+  CHANGE_TASK_TITLE: "CHANGE_TASK_TITLE",
 };
 
 export const archiveTask = (id) => ({ type: actions.ARCHIVE_TASK, id });
 export const pinTask = (id) => ({ type: actions.PIN_TASK, id });
 export const setIsWrongState = (isWrongState) => ({ type: actions.SET_WRONG_STATE, isWrongState });
+export const changeTaskTitle = (id, title) => ({ type: actions.CHANGE_TASK_TITLE, payload: { id, title } });
 
 function taskStateReducer(taskState) {
   return (state, action) => {
@@ -30,8 +32,21 @@ export const reducer = (state, action) => {
         ...state,
         isWrongState: action.isWrongState,
       };
-
-    // return taskListReducer(state, action);
+    case actions.CHANGE_TASK_TITLE:
+      const { id, title } = action.payload;
+      console.log("title: ", title);
+      const taskIndex = state.tasks.findIndex((task) => task.id === id);
+      console.log("taskIndex: ", taskIndex);
+      if (taskIndex !== -1) {
+        const clonedTask = [...state.tasks];
+        clonedTask[taskIndex]["title"] = title;
+        return {
+          ...state,
+          tasks: clonedTask,
+        };
+      } else {
+        return state;
+      }
     default:
       return state;
   }

@@ -8,10 +8,9 @@ import TaskList from "./TaskList";
 const mapStateToProps = (state) => {
   const { isWrongState } = state;
   return { isWrongState };
-  // return { error: isWrongState };
 };
 
-export function PureInboxScreen({ error, isWrongState }) {
+export function PureInboxScreen({ isWrongState }) {
   const dispatch = useDispatch();
   if (isWrongState) {
     return (
@@ -32,18 +31,18 @@ export function PureInboxScreen({ error, isWrongState }) {
         </h1>
       </nav>
       <TaskList />
-      <button onClick={() => dispatch(setIsWrongState(true))}>setWrongStatus</button>
+      <button onClick={() => dispatch(setIsWrongState(true))}>Set Wrong State</button>
     </div>
   );
 }
 
 PureInboxScreen.propTypes = {
   /** The error message */
-  error: PropTypes.string,
+  isWrongState: PropTypes.bool,
 };
 
 PureInboxScreen.defaultProps = {
-  error: null,
+  isWrongState: false,
 };
 
 export default connect(mapStateToProps)(PureInboxScreen);

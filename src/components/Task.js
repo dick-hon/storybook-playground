@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Task = ({ task: { id, title, state }, onArchiveTask, onPinTask }) => {
+const Task = ({ task: { id, title, state }, onArchiveTask, onPinTask, onTitleChange }) => {
   return (
     <div className={`list-item ${state}`}>
       <label className="checkbox">
@@ -9,7 +9,12 @@ const Task = ({ task: { id, title, state }, onArchiveTask, onPinTask }) => {
         <span className="checkbox-custom" onClick={() => onArchiveTask(id)} />
       </label>
       <div className="title">
-        <input type="text" value={title} readOnly={true} placeholder="Input title" />
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => onTitleChange(id, e.target.value)}
+          placeholder="Input title"
+        />
       </div>
 
       <div className="actions" onClick={(event) => event.stopPropagation()}>
@@ -39,4 +44,5 @@ Task.propTypes = {
   onArchiveTask: PropTypes.func,
   /** Event to change the task to pinned */
   onPinTask: PropTypes.func,
+  onTitleChange: PropTypes.func,
 };
