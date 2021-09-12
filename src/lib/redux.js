@@ -1,32 +1,44 @@
 import { createStore } from "redux";
 
 export const actions = {
-  ARCHIVE_TASK: "ARCHIVE_TASK",
-  PIN_TASK: "PIN_TASK",
+  SET_ARCHIVE_TASK: "SET_ARCHIVE_TASK",
+  SET_PIN_TASK: "SET_PIN_TASK",
   SET_WRONG_STATE: "SET_WRONG_STATE",
   CHANGE_TASK_TITLE: "CHANGE_TASK_TITLE",
 };
 
-export const archiveTask = (id) => ({ type: actions.ARCHIVE_TASK, id });
-export const pinTask = (id) => ({ type: actions.PIN_TASK, id });
+export const setArchiveTask = (id, isArchived) => ({ type: actions.SET_ARCHIVE_TASK, payload: { id, isArchived } });
+export const setPinTask = (id, isPinned) => ({ type: actions.SET_PIN_TASK, payload: { id, isPinned } });
 export const setIsWrongState = (isWrongState) => ({ type: actions.SET_WRONG_STATE, isWrongState });
 export const changeTaskTitle = (id, title) => ({ type: actions.CHANGE_TASK_TITLE, payload: { id, title } });
 
-function taskStateReducer(taskState) {
+const handleStatusChange = (updateStatus) => {
   return (state, action) => {
-    return {
-      ...state,
-      tasks: state.tasks.map((task) => (task.id === action.id ? { ...task, state: taskState } : task)),
-    };
+    console.log({ updateStatus, state, action });
+    const { id } = action.payload;
+    const index = state.tasks.findIndex((task) => task.id === id);
+    if (index !== -1) {
+      const clonedTask = [...state.tasks];
+      clonedTask[index][updateStatus] = !clonedTask[index][updateStatus];
+      return {
+        ...state,
+        tasks: clonedTask,
+      };
+    } else {
+      return state;
+    }
   };
-}
+};
 
 export const reducer = (state, action) => {
   switch (action.type) {
-    case actions.ARCHIVE_TASK:
-      return taskStateReducer("TASK_ARCHIVED")(state, action);
-    case actions.PIN_TASK:
-      return taskStateReducer("TASK_PINNED")(state, action);
+    case actions.SET_ARCHIVE_TASK: {
+      console.log("actions.ARCHIVE_TASK");
+      return handleStatusChange("isArchived")(state, action);
+    }
+
+    case actions.SET_PIN_TASK:
+      return handleStatusChange("isPinned")(state, action);
     case actions.SET_WRONG_STATE:
       return {
         ...state,
@@ -34,6 +46,7 @@ export const reducer = (state, action) => {
       };
     case actions.CHANGE_TASK_TITLE:
       const { id, title } = action.payload;
+
       console.log("title: ", title);
       const taskIndex = state.tasks.findIndex((task) => task.id === id);
       console.log("taskIndex: ", taskIndex);
@@ -53,10 +66,10 @@ export const reducer = (state, action) => {
 };
 
 const defaultTasks = [
-  { id: "1", title: "title 1", state: "TASK_INBOX" },
-  { id: "2", title: "title 2", state: "TASK_INBOX" },
-  { id: "3", title: "title 3", state: "TASK_INBOX" },
-  { id: "4", title: "title 4", state: "TASK_INBOX" },
+  { id: "1", title: "title 1", isArchived: false, isPinned: false },
+  { id: "2", title: "title 2", isArchived: false, isPinned: false },
+  { id: "3", title: "title 3", isArchived: false, isPinned: false },
+  { id: "4", title: "title 4", isArchived: false, isPinned: false },
 ];
 
 const taskBox = {

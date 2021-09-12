@@ -1,28 +1,29 @@
 import React from "react";
 import PropTypes from "prop-types";
+import s from "./Task.module.css";
 
-const Task = ({ task: { id, title, state }, onArchiveTask, onPinTask, onTitleChange }) => {
+const Task = ({ task: { id, title, isArchived, isPinned }, onArchiveTaskChange, onPinTaskChange, onTitleChange }) => {
   return (
-    <div className={`list-item ${state}`}>
-      <label className="checkbox">
-        <input type="checkbox" defaultChecked={state === "TASK_ARCHIVED"} disabled={true} name="checked" />
-        <span className="checkbox-custom" onClick={() => onArchiveTask(id)} />
-      </label>
-      <div className="title">
+    <div className={`list-item`}>
+      <div className={s.taskArchivedContainer}>
         <input
-          type="text"
-          value={title}
-          onChange={(e) => onTitleChange(id, e.target.value)}
-          placeholder="Input title"
+          type="checkbox"
+          value={isArchived}
+          onClick={(event) => {
+            console.log(event);
+            onArchiveTaskChange(id, !event.target.checked);
+          }}
+          name="archiveTask"
         />
       </div>
-
-      <div className="actions" onClick={(event) => event.stopPropagation()}>
-        {state !== "TASK_ARCHIVED" && (
-          <a onClick={() => onPinTask(id)}>
-            <span className={`icon-star`}></span>
-          </a>
-        )}
+      <div className="title">
+        <input type="text" value={title} onChange={(e) => onTitleChange(id, e.target.value)} placeholder="Task Title" />
+      </div>
+      <div className="actions">
+        <div onClick={() => onPinTaskChange(id, !isPinned)}>
+          <span className={`icon-star`}></span>
+          {/* <span className={isPinned ? s.fillIconStar : s.unFillIconStart}></span> */}
+        </div>
       </div>
     </div>
   );
@@ -37,8 +38,8 @@ Task.propTypes = {
     id: PropTypes.string.isRequired,
     /** Title of the task */
     title: PropTypes.string.isRequired,
-    /** Current state of the task */
-    state: PropTypes.string.isRequired,
+    isArchived: PropTypes.bool.isRequired,
+    isPinned: PropTypes.bool.isRequired,
   }),
   /** Event to change the task to archived */
   onArchiveTask: PropTypes.func,

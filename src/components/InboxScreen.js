@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import { connect, useDispatch } from "react-redux";
@@ -12,6 +12,17 @@ const mapStateToProps = (state) => {
 
 export function PureInboxScreen({ isWrongState }) {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const apiResponse = () => {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+    };
+
+    apiResponse();
+  }, []);
+
   if (isWrongState) {
     return (
       <div className="page lists-show">
@@ -30,7 +41,7 @@ export function PureInboxScreen({ isWrongState }) {
           <span className="title-wrapper">Taskbox</span>
         </h1>
       </nav>
-      <TaskList />
+      <TaskList loading={isLoading} />
       <button onClick={() => dispatch(setIsWrongState(true))}>Set Wrong State</button>
     </div>
   );

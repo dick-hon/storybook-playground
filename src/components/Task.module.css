@@ -1,0 +1,15 @@
+.taskArchivedContainer {
+  display: flex;
+  height: 3rem;
+  width: 44px;
+  justify-content: center;
+  align-items: center;
+}
+
+.unfillIconStar::before {
+  content: "\e608";
+}
+
+.fillIconStar::before {
+  content: "\e609";
+}
