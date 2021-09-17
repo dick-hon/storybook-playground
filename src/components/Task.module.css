@@ -6,6 +6,17 @@
   align-items: center;
 }
 
+.actionContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.pinAction {
+  padding-right: 10px;
+}
+
 .unfillIconStar::before {
   content: "\e608";
 }

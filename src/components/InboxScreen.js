@@ -1,18 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 
 import { connect, useDispatch } from "react-redux";
 import { setIsWrongState } from "../lib/redux";
 import TaskList from "./TaskList";
+import Task from "./Task";
 
 const mapStateToProps = (state) => {
-  const { isWrongState } = state;
-  return { isWrongState };
+  const { isWrongState, tasks } = state;
+  return { isWrongState, tasks };
 };
 
-export function PureInboxScreen({ isWrongState }) {
+export function PureInboxScreen({ isWrongState, tasks }) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
+  const pinnedTaskCount = useMemo(() => {
+    let count = 0;
+    tasks.forEach((task) => {
+      if (task.isArchived) count++;
+    });
+    return count;
+  }, [tasks]);
+
   useEffect(() => {
     const apiResponse = () => {
       setTimeout(() => {
@@ -42,6 +51,9 @@ export function PureInboxScreen({ isWrongState }) {
         </h1>
       </nav>
       <TaskList loading={isLoading} />
+      <h3>
+        There are {pinnedTaskCount} out of {tasks.length} Archived Task
+      </h3>
       <button onClick={() => dispatch(setIsWrongState(true))}>Set Wrong State</button>
     </div>
   );
@@ -50,6 +62,7 @@ export function PureInboxScreen({ isWrongState }) {
 PureInboxScreen.propTypes = {
   /** The error message */
   isWrongState: PropTypes.bool,
+  tasks: PropTypes.arrayOf(Task.propTypes.task).isRequired,
 };
 
 PureInboxScreen.defaultProps = {

@@ -1,11 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
+import cx from "classnames";
 import s from "./Task.module.css";
 
-const Task = ({ task: { id, title, isArchived, isPinned }, onArchiveTaskChange, onPinTaskChange, onTitleChange }) => {
+const Task = ({
+  task: { id, title, isArchived, isPinned },
+  onArchiveTaskChange,
+  onPinTaskChange,
+  onTitleChange,
+  onDeleteTask,
+}) => {
   return (
     <div className={`list-item`}>
-      <div className={s.taskArchivedContainer}>
+      <div className={cx(s.taskArchivedContainer)}>
         <input
           type="checkbox"
           value={isArchived}
@@ -19,10 +26,14 @@ const Task = ({ task: { id, title, isArchived, isPinned }, onArchiveTaskChange, 
       <div className="title">
         <input type="text" value={title} onChange={(e) => onTitleChange(id, e.target.value)} placeholder="Task Title" />
       </div>
-      <div className="actions">
-        <div onClick={() => onPinTaskChange(id, !isPinned)}>
-          <span className={`icon-star`}></span>
+      <div className={("actions", s.actionContainer)}>
+        <div className={s.pinAction} onClick={() => onPinTaskChange(id, !isPinned)}>
+          <span>{isPinned ? "pinned" : "unPin"}</span>
+          {/* <span className={`icon-star`}></span> */}
           {/* <span className={isPinned ? s.fillIconStar : s.unFillIconStart}></span> */}
+        </div>
+        <div onClick={() => onDeleteTask(id)}>
+          <span>Delete</span>
         </div>
       </div>
     </div>
@@ -46,4 +57,5 @@ Task.propTypes = {
   /** Event to change the task to pinned */
   onPinTask: PropTypes.func,
   onTitleChange: PropTypes.func,
+  onDeleteTask: PropTypes.func,
 };

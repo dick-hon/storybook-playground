@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Task from "./Task";
 
 import { connect } from "react-redux";
-import { setArchiveTask, setPinTask, changeTaskTitle } from "../lib/redux";
+import { setArchiveTask, setPinTask, changeTaskTitle, createTask, deleteTask } from "../lib/redux";
 
 const Loading = (props) => {
   return (
@@ -18,11 +18,21 @@ const Loading = (props) => {
   );
 };
 
-export const TasksList = ({ loading, tasks, onPinTaskChange, onArchiveTaskChange, onTitleChange }) => {
+export const TasksList = ({
+  loading,
+  tasks,
+  onPinTaskChange,
+  onArchiveTaskChange,
+  onTitleChange,
+  createTask,
+  onDeleteTask,
+}) => {
   const events = {
     onPinTaskChange,
     onArchiveTaskChange,
     onTitleChange,
+    createTask,
+    onDeleteTask,
   };
 
   if (loading) {
@@ -72,6 +82,9 @@ TasksList.propTypes = {
   onPinTaskChange: PropTypes.func,
   /** Event to change the task to archived */
   onArchiveTaskChange: PropTypes.func,
+  onTitleChange: PropTypes.func,
+  createTask: PropTypes.func,
+  onDeleteTask: PropTypes.func,
 };
 
 TasksList.defaultProps = {
@@ -87,5 +100,7 @@ export default connect(
     onArchiveTaskChange: (id, isArchived) => dispatch(setArchiveTask(id, isArchived)),
     onPinTaskChange: (id, isPinned) => dispatch(setPinTask(id, isPinned)),
     onTitleChange: (id, title) => dispatch(changeTaskTitle(id, title)),
+    createTask: ({ title, isArchived, isPinned }) => dispatch(createTask({ title, isArchived, isPinned })),
+    onDeleteTask: (id) => dispatch(deleteTask(id)),
   })
 )(TasksList);
