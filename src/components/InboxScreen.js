@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 
+import s from "./Task.module.css";
 import { connect, useDispatch } from "react-redux";
 import { setIsWrongState } from "../lib/redux";
 import TaskList from "./TaskList";
@@ -34,7 +35,7 @@ export function PureInboxScreen({ isWrongState, tasks }) {
 
   if (isWrongState) {
     return (
-      <div className="page lists-show">
+      <div className={s.root}>
         <div className="wrapper-message">
           <span className="icon-face-sad" />
           <div className="title-message">Oh no!</div>
@@ -44,12 +45,8 @@ export function PureInboxScreen({ isWrongState, tasks }) {
     );
   }
   return (
-    <div className="page lists-show">
-      <nav>
-        <h1 className="title-page">
-          <span className="title-wrapper">Taskbox</span>
-        </h1>
-      </nav>
+    <div className={s.root}>
+      <h1>TODO</h1>
       <TaskList loading={isLoading} />
       <h3>
         There are {pinnedTaskCount} out of {tasks.length} Archived Task

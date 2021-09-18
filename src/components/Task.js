@@ -5,13 +5,17 @@ import s from "./Task.module.css";
 
 const Task = ({
   task: { id, title, isArchived, isPinned },
+  index,
   onArchiveTaskChange,
   onPinTaskChange,
   onTitleChange,
   onDeleteTask,
 }) => {
   return (
-    <div className={`list-item`}>
+    <div className={s.taskContainer}>
+      <div className={s.taskIndexContainer}>
+        <span>{index}</span>
+      </div>
       <div className={cx(s.taskArchivedContainer)}>
         <input
           type="checkbox"
@@ -21,19 +25,26 @@ const Task = ({
             onArchiveTaskChange(id, !event.target.checked);
           }}
           name="archiveTask"
+          style={{ width: "100%" }}
         />
       </div>
-      <div className="title">
-        <input type="text" value={title} onChange={(e) => onTitleChange(id, e.target.value)} placeholder="Task Title" />
+      <div className={s.taskTitleContainer}>
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => onTitleChange(id, e.target.value)}
+          placeholder="Task Title"
+          style={{ width: "100%" }}
+        />
       </div>
-      <div className={("actions", s.actionContainer)}>
-        <div className={s.pinAction} onClick={() => onPinTaskChange(id, !isPinned)}>
-          <span>{isPinned ? "pinned" : "unPin"}</span>
+      <div className={s.actionContainer}>
+        <div className={s.pinAction}>
+          <span onClick={() => onPinTaskChange(id, !isPinned)}>{isPinned ? "pinned" : "unPin"}</span>
           {/* <span className={`icon-star`}></span> */}
           {/* <span className={isPinned ? s.fillIconStar : s.unFillIconStart}></span> */}
         </div>
-        <div onClick={() => onDeleteTask(id)}>
-          <span>Delete</span>
+        <div className={s.deleteAction}>
+          <span onClick={() => onDeleteTask(id)}>Delete</span>
         </div>
       </div>
     </div>

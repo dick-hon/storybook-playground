@@ -65,9 +65,9 @@ export const TasksList = ({
   // ];
 
   return (
-    <div className="list-items">
-      {tasks.map((task) => (
-        <Task key={task.id} task={task} {...events} />
+    <div>
+      {tasks.map((task, index) => (
+        <Task key={task.id} task={task} index={index + 1} {...events} />
       ))}
     </div>
   );
