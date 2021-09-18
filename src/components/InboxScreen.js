@@ -18,7 +18,7 @@ export function PureInboxScreen({ isWrongState, tasks }) {
   const pinnedTaskCount = useMemo(() => {
     let count = 0;
     tasks.forEach((task) => {
-      if (task.isArchived) count++;
+      if (task.isFinished) count++;
     });
     return count;
   }, [tasks]);
@@ -44,6 +44,7 @@ export function PureInboxScreen({ isWrongState, tasks }) {
       </div>
     );
   }
+
   return (
     <div className={s.root}>
       <h1>TODO</h1>

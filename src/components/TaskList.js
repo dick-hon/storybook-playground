@@ -1,49 +1,40 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Task from "./Task";
-
+import TaskHeader from "./TaskHeader";
+import { Skeleton } from "antd";
 import { connect } from "react-redux";
-import { setArchiveTask, setPinTask, changeTaskTitle, createTask, deleteTask } from "../lib/redux";
-
-const Loading = (props) => {
-  return (
-    <div className="loading-item">
-      <span className="glow-checkbox" />
-      <span className="glow-text">
-        <span>Loading</span>
-        <span>cool</span>
-        <span>state</span>
-      </span>
-    </div>
-  );
-};
+import { setFinishTask, setPinTask, changeTaskTitle, createTask, deleteTask } from "../lib/redux";
+import useCreateTask from "./hooks/useCreateTask";
+import NewTask from "./NewTask";
 
 export const TasksList = ({
   loading,
   tasks,
-  onPinTaskChange,
-  onArchiveTaskChange,
+  onPinTaskClick,
+  onFinishTaskClick,
   onTitleChange,
-  createTask,
+  onCreateTask,
   onDeleteTask,
 }) => {
+  const { newTask, onFinishNewTaskClick, onPinNewTaskClick, onNewTaskTitleChange, resetNewTask } = useCreateTask();
+
   const events = {
-    onPinTaskChange,
-    onArchiveTaskChange,
+    onPinTaskClick,
+    onFinishTaskClick,
     onTitleChange,
-    createTask,
     onDeleteTask,
   };
 
   if (loading) {
     return (
-      <div className="list-items">
+      <React.Fragment>
         {tasks.map((task) => (
           <React.Fragment key={task.id}>
-            <Loading />
+            <Skeleton active />
           </React.Fragment>
         ))}
-      </div>
+      </React.Fragment>
     );
   }
 
@@ -66,9 +57,20 @@ export const TasksList = ({
 
   return (
     <div>
+      <TaskHeader />
       {tasks.map((task, index) => (
         <Task key={task.id} task={task} index={index + 1} {...events} />
       ))}
+      <NewTask
+        newTask={newTask}
+        onFinishTaskClick={onFinishNewTaskClick}
+        onPinTaskClick={onPinNewTaskClick}
+        onTitleChange={onNewTaskTitleChange}
+        onSave={() => {
+          onCreateTask(newTask);
+          resetNewTask();
+        }}
+      />
     </div>
   );
 };
@@ -83,7 +85,7 @@ TasksList.propTypes = {
   /** Event to change the task to archived */
   onArchiveTaskChange: PropTypes.func,
   onTitleChange: PropTypes.func,
-  createTask: PropTypes.func,
+  onCreateTask: PropTypes.func,
   onDeleteTask: PropTypes.func,
 };
 
@@ -97,10 +99,10 @@ export default connect(
     tasks,
   }),
   (dispatch) => ({
-    onArchiveTaskChange: (id, isArchived) => dispatch(setArchiveTask(id, isArchived)),
-    onPinTaskChange: (id, isPinned) => dispatch(setPinTask(id, isPinned)),
+    onFinishTaskClick: (id, isArchived) => dispatch(setFinishTask(id, isArchived)),
+    onPinTaskClick: (id, isPinned) => dispatch(setPinTask(id, isPinned)),
     onTitleChange: (id, title) => dispatch(changeTaskTitle(id, title)),
-    createTask: ({ title, isArchived, isPinned }) => dispatch(createTask({ title, isArchived, isPinned })),
+    onCreateTask: ({ title, isArchived, isPinned }) => dispatch(createTask({ title, isArchived, isPinned })),
     onDeleteTask: (id) => dispatch(deleteTask(id)),
   })
 )(TasksList);
