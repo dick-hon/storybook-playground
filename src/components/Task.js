@@ -4,7 +4,7 @@ import s from "./Task.module.css";
 import { Input, Checkbox } from "antd";
 import TaskAction from "./TaskAction";
 
-const TaskTitle = ({ id, isFinished, title, onChange }) => {
+const TaskTitle = ({ isFinished, title, onChange }) => {
   if (isFinished) {
     return <span className={s.finishedTaskTitle}>{title}</span>;
   }

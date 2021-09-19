@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
-
 import s from "./Task.module.css";
 import { connect, useDispatch } from "react-redux";
 import { setIsWrongState } from "../lib/redux";
 import TaskList from "./TaskList";
 import Task from "./Task";
+import { Result, Button } from "antd";
 
 const mapStateToProps = (state) => {
   const { isWrongState, tasks } = state;
   return { isWrongState, tasks };
 };
 
-export function PureInboxScreen({ isWrongState, tasks }) {
+export function Todo({ isWrongState, tasks }) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const finishedTaskCount = useMemo(() => {
@@ -36,13 +36,16 @@ export function PureInboxScreen({ isWrongState, tasks }) {
 
   if (isWrongState) {
     return (
-      <div className={s.root}>
-        <div className="wrapper-message">
-          <span className="icon-face-sad" />
-          <div className="title-message">Oh no!</div>
-          <div className="subtitle-message">Something went wrong</div>
-        </div>
-      </div>
+      <Result
+        status="500"
+        title="500"
+        subTitle="Sorry, something went wrong."
+        extra={
+          <Button type="primary" onClick={() => window.location.reload()}>
+            Refresh
+          </Button>
+        }
+      />
     );
   }
 
@@ -58,14 +61,14 @@ export function PureInboxScreen({ isWrongState, tasks }) {
   );
 }
 
-PureInboxScreen.propTypes = {
+Todo.propTypes = {
   /** The error message */
   isWrongState: PropTypes.bool,
   tasks: PropTypes.arrayOf(Task.propTypes.task).isRequired,
 };
 
-PureInboxScreen.defaultProps = {
+Todo.defaultProps = {
   isWrongState: false,
 };
 
-export default connect(mapStateToProps)(PureInboxScreen);
+export default connect(mapStateToProps)(Todo);

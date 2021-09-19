@@ -1,12 +1,12 @@
 import { Provider } from "react-redux";
 import store from "./lib/redux";
 
-import InboxScreen from "./components/InboxScreen";
+import Todo from "./components/Todo";
 
 function App() {
   return (
     <Provider store={store}>
-      <InboxScreen />
+      <Todo />
     </Provider>
   );
 }

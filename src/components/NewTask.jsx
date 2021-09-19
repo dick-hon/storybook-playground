@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import s from "./Task.module.css";
-import { Input, Checkbox, Card, Button } from "antd";
+import { Input, Checkbox } from "antd";
 import TaskAction from "./TaskAction";
 
 const NewTask = ({

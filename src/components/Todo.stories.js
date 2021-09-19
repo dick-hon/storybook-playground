@@ -1,7 +1,7 @@
 import React from "react";
 import { Provider } from "react-redux";
 
-import { PureInboxScreen } from "./InboxScreen";
+import { Todo } from "./Todo";
 
 import { action } from "@storybook/addon-actions";
 
@@ -16,12 +16,12 @@ const store = {
 };
 
 export default {
-  component: PureInboxScreen,
+  component: Todo,
   decorators: [(story) => <Provider store={store}>{story()}</Provider>],
   title: "InboxScreen",
 };
 
-const Template = (args) => <PureInboxScreen {...args} />;
+const Template = (args) => <Todo {...args} />;
 
 export const Default = Template.bind({});
 
