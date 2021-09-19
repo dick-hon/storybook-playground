@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
-import cx from "classnames";
 import s from "./Task.module.css";
-import PinTask from "./TaskAction";
 import { Input, Checkbox } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
 import TaskAction from "./TaskAction";
+
+const TaskTitle = ({ id, isFinished, title, onChange }) => {
+  if (isFinished) {
+    return <span className={s.finishedTaskTitle}>{title}</span>;
+  }
+  return (
+    <Input
+      value={title}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder="Task Title"
+      style={{ width: "100%" }}
+    />
+  );
+};
 
 const Task = ({
   task: { id, title, isFinished, isPinned },
@@ -15,6 +26,8 @@ const Task = ({
   onTitleChange,
   onDeleteTask,
 }) => {
+  const onChange = useCallback((id) => (title) => onTitleChange(id, title), [onTitleChange]);
+
   return (
     <div className={s.taskContainer}>
       <div className={s.taskIndexContainer}>
@@ -30,12 +43,7 @@ const Task = ({
         />
       </div>
       <div className={s.taskTitleContainer}>
-        <Input
-          value={title}
-          onChange={(e) => onTitleChange(id, e.target.value)}
-          placeholder="Task Title"
-          style={{ width: "100%" }}
-        />
+        <TaskTitle isFinished={isFinished} title={title} onChange={onChange(id)} />
       </div>
       <div className={s.actionContainer}>
         <TaskAction id={id} isPinned={isPinned} onPinTaskClick={onPinTaskClick} onActionClick={onDeleteTask} />
