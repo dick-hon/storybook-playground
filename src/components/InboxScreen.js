@@ -15,13 +15,14 @@ const mapStateToProps = (state) => {
 export function PureInboxScreen({ isWrongState, tasks }) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
-  const pinnedTaskCount = useMemo(() => {
+  const finishedTaskCount = useMemo(() => {
     let count = 0;
     tasks.forEach((task) => {
       if (task.isFinished) count++;
     });
     return count;
   }, [tasks]);
+  const totalTask = useMemo(() => tasks.length, [tasks]);
 
   useEffect(() => {
     const apiResponse = () => {
@@ -50,7 +51,7 @@ export function PureInboxScreen({ isWrongState, tasks }) {
       <h1>TODO</h1>
       <TaskList loading={isLoading} />
       <h3>
-        There are {pinnedTaskCount} out of {tasks.length} Archived Task
+        You have finished {finishedTaskCount} out of {totalTask} task.
       </h3>
       <button onClick={() => dispatch(setIsWrongState(true))}>Set Wrong State</button>
     </div>

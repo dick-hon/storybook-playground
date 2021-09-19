@@ -2,7 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import cx from "classnames";
 import s from "./Task.module.css";
-import { Input, Checkbox, Button, Card } from "antd";
+import PinTask from "./TaskAction";
+import { Input, Checkbox } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
+import TaskAction from "./TaskAction";
 
 const Task = ({
   task: { id, title, isFinished, isPinned },
@@ -13,44 +16,31 @@ const Task = ({
   onDeleteTask,
 }) => {
   return (
-    <Card hoverable style={{ cursor: "initial" }}>
-      <div className={s.taskContainer}>
-        <div className={s.taskIndexContainer}>
-          <span>{index}</span>
-        </div>
-        <div className={cx(s.taskArchivedContainer)}>
-          <Checkbox
-            checked={isFinished}
-            onChange={(event) => {
-              console.log(event);
-              onFinishTaskClick(id, !event.target.checked);
-            }}
-          />
-        </div>
-        <div className={s.taskTitleContainer}>
-          <Input
-            value={title}
-            onChange={(e) => onTitleChange(id, e.target.value)}
-            placeholder="Task Title"
-            style={{ width: "100%" }}
-          />
-        </div>
-        <div className={s.actionContainer}>
-          <div className={s.pinAction}>
-            <Button type="primary" onClick={() => onPinTaskClick(id, !isPinned)}>
-              {isPinned ? "Pin Task" : "Unpin Task"}
-            </Button>
-            {/* <span className={`icon-star`}></span> */}
-            {/* <span className={isPinned ? s.fillIconStar : s.unFillIconStart}></span> */}
-          </div>
-          <div className={s.deleteAction}>
-            <Button type="primary" onClick={() => onDeleteTask(id)}>
-              Delete Task
-            </Button>
-          </div>
-        </div>
+    <div className={s.taskContainer}>
+      <div className={s.taskIndexContainer}>
+        <span>{index}</span>
       </div>
-    </Card>
+      <div className={s.taskArchivedContainer}>
+        <Checkbox
+          checked={isFinished}
+          onChange={(event) => {
+            console.log(event);
+            onFinishTaskClick(id, !event.target.checked);
+          }}
+        />
+      </div>
+      <div className={s.taskTitleContainer}>
+        <Input
+          value={title}
+          onChange={(e) => onTitleChange(id, e.target.value)}
+          placeholder="Task Title"
+          style={{ width: "100%" }}
+        />
+      </div>
+      <div className={s.actionContainer}>
+        <TaskAction id={id} isPinned={isPinned} onPinTaskClick={onPinTaskClick} onActionClick={onDeleteTask} />
+      </div>
+    </div>
   );
 };
 

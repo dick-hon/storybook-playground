@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import Task from "./Task";
 import TaskHeader from "./TaskHeader";
@@ -26,6 +26,11 @@ export const TasksList = ({
     onDeleteTask,
   };
 
+  const onSave = useCallback(() => {
+    onCreateTask(newTask);
+    resetNewTask();
+  }, [newTask, onCreateTask, resetNewTask]);
+
   if (loading) {
     return (
       <React.Fragment>
@@ -50,15 +55,12 @@ export const TasksList = ({
     );
   }
 
-  // const tasksInOrder = [
-  //   ...tasks.filter((task) => task.state === "TASK_PINNED"),
-  //   ...tasks.filter((task) => task.state !== "TASK_PINNED"),
-  // ];
+  const tasksInOrder = [...tasks.filter((task) => task.isPinned), ...tasks.filter((task) => !task.isPinned)];
 
   return (
     <div>
       <TaskHeader />
-      {tasks.map((task, index) => (
+      {tasksInOrder.map((task, index) => (
         <Task key={task.id} task={task} index={index + 1} {...events} />
       ))}
       <NewTask
@@ -66,10 +68,7 @@ export const TasksList = ({
         onFinishTaskClick={onFinishNewTaskClick}
         onPinTaskClick={onPinNewTaskClick}
         onTitleChange={onNewTaskTitleChange}
-        onSave={() => {
-          onCreateTask(newTask);
-          resetNewTask();
-        }}
+        onSave={onSave}
       />
     </div>
   );
@@ -102,7 +101,7 @@ export default connect(
     onFinishTaskClick: (id, isArchived) => dispatch(setFinishTask(id, isArchived)),
     onPinTaskClick: (id, isPinned) => dispatch(setPinTask(id, isPinned)),
     onTitleChange: (id, title) => dispatch(changeTaskTitle(id, title)),
-    onCreateTask: ({ title, isArchived, isPinned }) => dispatch(createTask({ title, isArchived, isPinned })),
+    onCreateTask: ({ title, isFinished, isPinned }) => dispatch(createTask({ title, isFinished, isPinned })),
     onDeleteTask: (id) => dispatch(deleteTask(id)),
   })
 )(TasksList);

@@ -71,10 +71,8 @@ export const reducer = (state, action) => {
     case actions.CREATE_TASK: {
       const { title, isFinished, isPinned } = action.payload;
 
-      console.log("%credux.js line:74 id:", "color: white; background-color: #26bfa5;", state.tasks.length);
-
       const newTask = {
-        id: toString(state.tasks.length),
+        id: (state.tasks.length + 1).toString(),
         title,
         isFinished,
         isPinned,
@@ -101,7 +99,7 @@ export const reducer = (state, action) => {
 };
 
 const defaultTasks = [
-  { id: "1", title: "title 1", isFinished: false, isPinned: false },
+  { id: "1", title: "Title 1", isFinished: false, isPinned: false },
   { id: "2", title: "title 2", isFinished: false, isPinned: false },
   { id: "3", title: "title 3", isFinished: false, isPinned: false },
   { id: "4", title: "title 4", isFinished: false, isPinned: false },
