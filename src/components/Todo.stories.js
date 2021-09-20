@@ -18,7 +18,7 @@ const store = {
 export default {
   component: Todo,
   decorators: [(story) => <Provider store={store}>{story()}</Provider>],
-  title: "InboxScreen",
+  title: "Todo",
 };
 
 const Template = (args) => <Todo {...args} />;
